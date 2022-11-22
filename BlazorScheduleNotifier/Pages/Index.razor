@@ -7,7 +7,7 @@
 
 @if (_queues == null)
 {
-    <p class="text-center text-secondary">Завантаження...</p>
+    <p class="text-center text-secondary">Завантаження розкладу відключень...</p>
 }
 else
 {
@@ -106,8 +106,14 @@ else
     protected override async Task OnInitializedAsync()
     {
         City = City ?? "sumy";
-        var str = await Http.GetStringAsync($"./data/{City}.json");
-        _cityData = await Http.GetFromJsonAsync<City>($"./data/{City}.json");
+        _cityData = await LoadFromLocalCache(City);
+
+        if (_cityData == default)
+        {
+            _cityData = await Http.GetFromJsonAsync<City>($"./data/{City}.json");
+            await SaveToLocalCache(City, _cityData);
+        }
+
         if (_cityData != default)
             _queues = (_cityData?.queues ?? Enumerable.Empty<Queue>().ToList()).ToArray();
 
@@ -130,6 +136,24 @@ else
             _tick = DateTime.Now.ToLocalTime();      
             await InvokeAsync(StateHasChanged);
         }, null, 0, 1000);
+    }
+
+    public async Task<City?> LoadFromLocalCache(string cityId)
+    {
+        var lastModified = await _localStorageService.GetItemAsync<string>("cache_lastmodified_" + cityId);
+        if (lastModified == default || DateTime.Parse(lastModified).AddDays(1) < DateTime.Today)
+            return default;
+
+        return await _localStorageService.GetItemAsync<City>("cache_" + cityId);
+    }
+
+    public async Task SaveToLocalCache(string cityId, City? data)
+    {
+        if (data == default)
+            return;
+
+        await _localStorageService.SetItemAsync<string>("cache_lastmodified_" + cityId, DateTime.Now.ToString());
+        await _localStorageService.SetItemAsync<City>("cache_" + cityId, data);
     }
 
     public async Task<SelectedQueue[]> LoadSelectedQueues(string cityId)
