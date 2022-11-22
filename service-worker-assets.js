@@ -221,11 +221,11 @@
       "url": "favicon.ico"
     },
     {
-      "hash": "sha256-DbpQaq68ZSb5IoPosBErM1QWBfsbTxpJqhU0REi6wP4=",
+      "hash": "sha256-YH0uQx4C7PhGtAq9CGE45y3wxV2cHVYHFaZxXBZ8hT0=",
       "url": "icon-192.png"
     },
     {
-      "hash": "sha256-oEo6d+KqX5fjxTiZk\/w9NB3Mi0+ycS5yLwCKwr4IkbA=",
+      "hash": "sha256-I4aBONOljeOf+ViB61\/\/+btBuTGU9XQzoqBCKqXMkRo=",
       "url": "icon-512.png"
     },
     {
@@ -237,5 +237,5 @@
       "url": "manifest.json"
     }
   ],
-  "version": "tNLNZXUT"
+  "version": "LRNr35jV"
 };
