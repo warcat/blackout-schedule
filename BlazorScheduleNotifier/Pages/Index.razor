@@ -76,7 +76,7 @@ else
         </div>
     </div>
     var contact = "https://t.me/UaWarcat";
-    <p class="text-secondary">Розклад відключень електроенергії базується на <a target="_blank" href="/data/sumy.png">цьому</a> графіку</p>
+    <p class="text-secondary">Розклад відключень електроенергії базується на <a target="_blank" href="./data/sumy.png">цьому</a> графіку</p>
     <p class="text-secondary">Пропозиції, зауваження пишіть в <a target="_blank"tar href="@contact">телеграм</a></p>
     <!--
     <figure class="text-end">
@@ -102,7 +102,7 @@ else
     {
         City = City ?? "sumy";
 
-        _queues = await Http.GetFromJsonAsync<Queue[]>($"data/{City}.json");
+        _queues = await Http.GetFromJsonAsync<Queue[]>($"./data/{City}.json");
 
         _tick = DateTime.Now;
         _timer = new System.Threading.Timer(async _ =>  // async void
