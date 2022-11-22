@@ -4,11 +4,11 @@
 @implements IDisposable
 @using Models;
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Графіки відключення світла - @_cityData?.name</PageTitle>
 
 @if (_queues == null)
 {
-    <p>Loading...</p>
+    <p class="text-center text-secondary">Завантаження...</p>
 }
 else
 {
@@ -16,9 +16,8 @@ else
         <div class="col">
             <div class="card" style="width: 100%;">
                 <div class="card-body">
-                    <h1 class="text-center">м. Суми</h1>
+                    <h1 class="text-center">@_cityData?.name</h1>
                     <h2 class="text-primary text-center">Зараз @_tick.ToString("HH:mm:ss")</h2>
-                    <!--<h5 class="card-title">Показати черги:</h5>-->
                     <div class="card-text">
                         @foreach (var queue in _queues)
                         {
@@ -78,34 +77,32 @@ else
     var contact = "https://t.me/UaWarcat";
     <p class="text-secondary">Розклад відключень електроенергії базується на <a target="_blank" href="./data/sumy.png">цьому</a> графіку</p>
     <p class="text-secondary">Пропозиції, зауваження пишіть в <a target="_blank"tar href="@contact">телеграм</a></p>
-    <!--
-    <figure class="text-end">
-      <blockquote class="blockquote">
-        <p>Кацапи ще не сдохли.</p>
-      </blockquote>
-      <figcaption class="blockquote-footer">
-         <cite title="Source Title">Українська народна мудрість</cite>
-      </figcaption>
-    </figure>
-    -->
 }
 
 @code {
     [Parameter]
     public string City { get; set; }
 
-    private Queue[] _queues;
-    System.Threading.Timer _timer;
+    private Models.City? _cityData;
+    private Queue[]? _queues;
+    System.Threading.Timer? _timer;
     private DateTime _tick;
+
+    public Index()
+    {
+        City = "sumy";
+    }
 
     protected override async Task OnInitializedAsync()
     {
         City = City ?? "sumy";
-
-        _queues = await Http.GetFromJsonAsync<Queue[]>($"./data/{City}.json");
+        var str = await Http.GetStringAsync($"./data/{City}.json");
+        _cityData = await Http.GetFromJsonAsync<City>($"./data/{City}.json");
+        if (_cityData != default)
+            _queues = (_cityData?.queues ?? Enumerable.Empty<Queue>().ToList()).ToArray();
 
         _tick = DateTime.Now;
-        _timer = new System.Threading.Timer(async _ =>  // async void
+        _timer = new System.Threading.Timer(async _ =>
         {
             _tick = DateTime.Now;      
             await InvokeAsync(StateHasChanged);
@@ -114,6 +111,9 @@ else
 
     public IEnumerable<QueueTime> GetSchedule(DateTime date)
     {
+        if (_queues == default)
+            return Enumerable.Empty<QueueTime>();
+
         return _queues.Where(q => q.IsChecked)
                      .SelectMany(q =>
                          q.ranges
@@ -152,17 +152,5 @@ else
     public void Dispose()
     {
         _timer?.Dispose();
-    }
-
-    public class QueueTime
-    {
-        public QueueTime(Queue queue, OfflineTime time)
-        {
-            Queue = queue;
-            Time = time;
-        }
-
-        public Queue Queue { get; }
-        public OfflineTime Time { get; }
     }
 }

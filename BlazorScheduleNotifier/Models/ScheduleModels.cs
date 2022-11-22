@@ -2,6 +2,12 @@
 
 namespace BlazorScheduleNotifier.Models
 {
+    public class City
+    {
+        public string name { get; set; }
+        public List<Queue> queues { get; set; }
+    }
+
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
     public class OfflineTime
     {
@@ -26,5 +32,17 @@ namespace BlazorScheduleNotifier.Models
         public bool IsChecked { get; set; } = true;
         public string name { get; set; }
         public List<Range> ranges { get; set; }
+    }
+
+    public class QueueTime
+    {
+        public QueueTime(Queue queue, OfflineTime time)
+        {
+            Queue = queue;
+            Time = time;
+        }
+
+        public Queue Queue { get; }
+        public OfflineTime Time { get; }
     }
 }
