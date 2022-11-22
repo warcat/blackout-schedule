@@ -1,0 +1,168 @@
+﻿@page "/{city?}"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@implements IDisposable
+@using Models;
+
+<PageTitle>Index</PageTitle>
+
+@if (_queues == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="row">
+        <div class="col">
+            <div class="card" style="width: 100%;">
+                <div class="card-body">
+                    <h1 class="text-center">м. Суми</h1>
+                    <h2 class="text-primary text-center">Зараз @_tick.ToString("HH:mm:ss")</h2>
+                    <!--<h5 class="card-title">Показати черги:</h5>-->
+                    <div class="card-text">
+                        @foreach (var queue in _queues)
+                        {
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" checked="@(queue.IsChecked)" value="@(queue.IsChecked)" id="@queue.name" @onclick="@( () => queue.IsChecked = !queue.IsChecked )">
+                                <label class="form-check-label" for="@queue.name">
+                                    @queue.name
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="mt-5">Сьогодні, @_tick.ToString("d.MM")</h2>
+            <dl class="row align-content-center">
+                @foreach (var g in GetSchedule(_tick).GroupBy(x => x.Queue))
+                {
+                    <dt class="col-sm-6 col-md-4 @GetQueueCssClass(g)">@g.Key.name</dt>
+                    <dd class="col-sm-6 col-md-8">
+                        <ul class="list-group">
+                            @foreach (var time in g.Select(x => x.Time))
+                            {
+                                <li class="list-group-item list-group-item-@GetTimeCssClass(time)">@time.from - @time.to</li>
+                            }
+                        </ul>
+                    </dd>
+                }
+            </dl>
+        </div>
+        <div class="col-md-6">
+            @{
+                var nextDay = _tick.AddDays(1).Date;
+            }
+            
+            <h2 class="mt-5 text-secondary">Завтра, @nextDay.ToString("d.MM")</h2>
+            <dl class="row align-content-center">
+                @foreach (var g in GetSchedule(nextDay).GroupBy(x => x.Queue))
+                {
+                    <dt class="col-sm-6 col-md-4">@g.Key.name</dt>
+                    <dd class="col-sm-6 col-md-8">
+                        <ul class="list-group">
+                        @foreach (var time in g.Select(x => x.Time))
+                        {
+                            <li class="list-group-item">@time.from - @time.to</li>
+                        }
+                        </ul>
+                    </dd>
+                }
+            </dl>
+        </div>
+    </div>
+    var contact = "https://t.me/UaWarcat";
+    <p class="text-secondary">Розклад відключень електроенергії базується на <a target="_blank" href="/data/sumy.png">цьому</a> графіку</p>
+    <p class="text-secondary">Пропозиції, зауваження пишіть в <a target="_blank"tar href="@contact">телеграм</a></p>
+    <!--
+    <figure class="text-end">
+      <blockquote class="blockquote">
+        <p>Кацапи ще не сдохли.</p>
+      </blockquote>
+      <figcaption class="blockquote-footer">
+         <cite title="Source Title">Українська народна мудрість</cite>
+      </figcaption>
+    </figure>
+    -->
+}
+
+@code {
+    [Parameter]
+    public string City { get; set; }
+
+    private Queue[] _queues;
+    System.Threading.Timer _timer;
+    private DateTime _tick;
+
+    protected override async Task OnInitializedAsync()
+    {
+        City = City ?? "sumy";
+
+        _queues = await Http.GetFromJsonAsync<Queue[]>($"data/{City}.json");
+
+        _tick = DateTime.Now;
+        _timer = new System.Threading.Timer(async _ =>  // async void
+        {
+            _tick = DateTime.Now;      
+            await InvokeAsync(StateHasChanged);
+        }, null, 0, 1000);
+    }
+
+    public IEnumerable<QueueTime> GetSchedule(DateTime date)
+    {
+        return _queues.Where(q => q.IsChecked)
+                     .SelectMany(q =>
+                         q.ranges
+                             .Where(r => r.days.Contains(date.Day))
+                             .SelectMany(r => r.offline_time)
+                             .Select(t => new QueueTime(q, t)));
+    }
+
+    public string GetTimeCssClass(OfflineTime time)
+    {
+        var isPassed = time.To < _tick.TimeOfDay;
+        var isCurrent = time.From < _tick.TimeOfDay && time.To > _tick.TimeOfDay;
+        var isFeature = !isCurrent && time.From < _tick.TimeOfDay.Add(TimeSpan.FromMinutes(120));
+
+        if (isPassed) return "secondary";
+        if (isCurrent) return "danger";
+        if (isFeature) return "warning";
+
+        return "";
+    }
+
+    public string GetQueueCssClass(IGrouping<Queue, QueueTime> g)
+    {
+        if (g.Any(t => GetTimeCssClass(t.Time).Contains("danger")))
+            return "text-danger";
+
+        if (g.Any(t => GetTimeCssClass(t.Time).Contains("warning")))
+            return "text-warning";
+
+        if (g.All(t => GetTimeCssClass(t.Time).Contains("secondary")))
+            return "text-secondary";
+
+        return "";
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
+
+    public class QueueTime
+    {
+        public QueueTime(Queue queue, OfflineTime time)
+        {
+            Queue = queue;
+            Time = time;
+        }
+
+        public Queue Queue { get; }
+        public OfflineTime Time { get; }
+    }
+}
