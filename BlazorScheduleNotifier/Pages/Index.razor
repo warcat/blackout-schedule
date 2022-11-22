@@ -1,7 +1,6 @@
 ﻿@page "/{city?}"
-@inject HttpClient Http
-@inject NavigationManager NavigationManager
 @implements IDisposable
+@using Majorsoft.Blazor.Extensions.BrowserStorage
 @using Models;
 
 <PageTitle>Графіки відключення світла - @_cityData?.name</PageTitle>
@@ -22,7 +21,12 @@ else
                         @foreach (var queue in _queues)
                         {
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" checked="@(queue.IsChecked)" value="@(queue.IsChecked)" id="@queue.name" @onclick="@( () => queue.IsChecked = !queue.IsChecked )">
+                                <input class="form-check-input" type="checkbox" checked="@(queue.IsChecked)" value="@(queue.IsChecked)" id="@queue.name" 
+                                @onclick="@(async () => 
+                                {
+                                    queue.IsChecked = !queue.IsChecked;
+                                    await SaveSelectedQueue(City, queue.name, queue.IsChecked);
+                                })">
                                 <label class="form-check-label" for="@queue.name">
                                     @queue.name
                                 </label>
@@ -79,6 +83,10 @@ else
     <p class="text-secondary">Пропозиції, зауваження пишіть в <a target="_blank"tar href="@contact">телеграм</a></p>
 }
 
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService _localStorageService
+
 @code {
     [Parameter]
     public string City { get; set; }
@@ -87,6 +95,8 @@ else
     private Queue[]? _queues;
     System.Threading.Timer? _timer;
     private DateTime _tick;
+
+    private SelectedQueue[] _selectedQueues;
 
     public Index()
     {
@@ -101,12 +111,52 @@ else
         if (_cityData != default)
             _queues = (_cityData?.queues ?? Enumerable.Empty<Queue>().ToList()).ToArray();
 
+        if (_queues != default)
+        {
+            _selectedQueues = await LoadSelectedQueues(City);
+            foreach (var item in _selectedQueues)
+            {
+                var q = _queues.FirstOrDefault(x => x.name == item.QueueName);
+                if (q == default)
+                    continue;
+
+                q.IsChecked = item.IsSelected;
+            }
+        }
+
         _tick = DateTime.Now;
         _timer = new System.Threading.Timer(async _ =>
         {
             _tick = DateTime.Now;      
             await InvokeAsync(StateHasChanged);
         }, null, 0, 1000);
+    }
+
+    public async Task<SelectedQueue[]> LoadSelectedQueues(string cityId)
+    {
+        var result = new List<SelectedQueue>();
+        await foreach (var key in _localStorageService.GetAllKeysAsync())
+        {
+            if (!key.StartsWith(cityId))
+                continue;
+
+            var queueName = key.Replace(cityId + "_", string.Empty);
+            var isSelected = await _localStorageService.GetItemAsync<bool>(key);
+
+            result.Add(new SelectedQueue
+            {
+                City = cityId,
+                QueueName = queueName,
+                IsSelected = isSelected
+            });
+        }
+
+        return result.ToArray();
+    }
+
+    public async Task SaveSelectedQueue(string cityId, string queuName, bool isSelected)
+    {
+        await _localStorageService.SetItemAsync<bool>($"{cityId}_{queuName}", isSelected);
     }
 
     public IEnumerable<QueueTime> GetSchedule(DateTime date)

@@ -33,16 +33,4 @@ namespace BlazorScheduleNotifier.Models
         public string name { get; set; }
         public List<Range> ranges { get; set; }
     }
-
-    public class QueueTime
-    {
-        public QueueTime(Queue queue, OfflineTime time)
-        {
-            Queue = queue;
-            Time = time;
-        }
-
-        public Queue Queue { get; }
-        public OfflineTime Time { get; }
-    }
 }
