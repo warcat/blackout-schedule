@@ -127,7 +127,7 @@ else
         _tick = DateTime.Now;
         _timer = new System.Threading.Timer(async _ =>
         {
-            _tick = DateTime.Now;      
+            _tick = DateTime.Now.ToLocalTime();      
             await InvokeAsync(StateHasChanged);
         }, null, 0, 1000);
     }
