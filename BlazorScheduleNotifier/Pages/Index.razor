@@ -82,6 +82,7 @@ else
     <p class="text-secondary">Розклад відключень електроенергії базується на <a target="_blank" href="./data/sumy.png">цьому</a> графіку</p>
     <p class="text-secondary">Пропозиції, зауваження пишіть в <a target="_blank"tar href="@contact">телеграм</a></p>
     <p class="text-center">V 0.3</p>
+    <button @onclick="@( async () => await ResetCache())">Очистити кеш</button>
 }
 
 @inject HttpClient Http
@@ -109,6 +110,18 @@ else
         City = City ?? "sumy";
         _cityData = await LoadFromLocalCache(City);
 
+        await ReloadData();
+
+        _tick = DateTime.Now;
+        _timer = new System.Threading.Timer(async _ =>
+        {
+            _tick = DateTime.Now.ToLocalTime();      
+            await InvokeAsync(StateHasChanged);
+        }, null, 0, 1000);
+    }
+
+    private async Task ReloadData() 
+    {
         if (_cityData == default)
         {
             _cityData = await Http.GetFromJsonAsync<City>($"./data/{City}.json");
@@ -130,13 +143,13 @@ else
                 q.IsChecked = item.IsSelected;
             }
         }
+    }
 
-        _tick = DateTime.Now;
-        _timer = new System.Threading.Timer(async _ =>
-        {
-            _tick = DateTime.Now.ToLocalTime();      
-            await InvokeAsync(StateHasChanged);
-        }, null, 0, 1000);
+    public async Task ResetCache()
+    {
+        await _localStorageService.ClearAsync();
+        _cityData = default;
+        await ReloadData();
     }
 
     public async Task<City?> LoadFromLocalCache(string cityId)
