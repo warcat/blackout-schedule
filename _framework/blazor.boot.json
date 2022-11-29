@@ -7,7 +7,7 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "BlazorScheduleNotifier.dll": "sha256-2BBe0ChVC0+67vck5UxsPq1ur1rNxUg3sa4Gar3vrPs=",
+      "BlazorScheduleNotifier.dll": "sha256-0+mdrgIMcOKR\/n7\/gLIE8XjAW472a27Z6MtQl91pP\/o=",
       "Majorsoft.Blazor.Extensions.BrowserStorage.dll": "sha256-CzSPfGpINxopBMIcknFAfkTmJTHWzMsUyJiq9fo538Q=",
       "Microsoft.AspNetCore.Components.dll": "sha256-YFHPyVbva+cBOdWPNqXYngum9hi3PY3RzuzXSI+V5UA=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-fsWQog9aNAyzw9xUKD6gpQK0lHXNA+\/zYF3i5ZXNOlI=",

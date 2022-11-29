@@ -33,11 +33,11 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-lPI6UG9D6xRh2ULMZoNTpEaKOAx3zI7Sksrx7LbCOGE=",
+      "hash": "sha256-IrhxQgaC5+HdiMH614Sr06iY75vmwe4WzXx8dXYDsYE=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-2BBe0ChVC0+67vck5UxsPq1ur1rNxUg3sa4Gar3vrPs=",
+      "hash": "sha256-0+mdrgIMcOKR\/n7\/gLIE8XjAW472a27Z6MtQl91pP\/o=",
       "url": "_framework\/BlazorScheduleNotifier.dll"
     },
     {
@@ -214,10 +214,18 @@
     },
     {
       "hash": "sha256-7Lh1iysjW3eN9BB9KWU8UKsHJIx2Pw8jwLGcH5JQp1Q=",
-      "url": "data\/sumy.json"
+      "url": "data\/sumy_2x6.json"
     },
     {
       "hash": "sha256-Wf6iYyIwXBjqiXpKdfborqrAOw5NePvFdeeHu863O0w=",
+      "url": "data\/sumy_2x6.png"
+    },
+    {
+      "hash": "sha256-jZwwT1EqUL816zYJHkTcADZK5mNWJPd0SVxOGr+VjDs=",
+      "url": "data\/sumy.json"
+    },
+    {
+      "hash": "sha256-xq8Rq5QFjIJkY7tRuyE1n3VekrswKEDOtjQ9UhAFBTQ=",
       "url": "data\/sumy.png"
     },
     {
@@ -241,5 +249,5 @@
       "url": "manifest.json"
     }
   ],
-  "version": "ej9ZNd5g"
+  "version": "O6L1S1AE"
 };
