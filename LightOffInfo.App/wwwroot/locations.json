@@ -1,0 +1,8 @@
+[
+    {
+        "id": "sumy",
+        "name": "Суми",
+        "dataUrl": "./data/sumy.json",
+        "dataAdapter": "InternalJsonAdapter"
+    }
+]

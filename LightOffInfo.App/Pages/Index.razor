@@ -1,0 +1,18 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@inject HttpClient Http
+@code 
+{
+	protected override async Task OnInitializedAsync()
+	{
+		var locationsLoader = new LocationsLoader(Http);
+		var locations = await locationsLoader.LoadAsync("locations.json");
+		await locationsLoader.LoadScheduleAsync(locations.First());
+	}
+}
