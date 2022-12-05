@@ -22,8 +22,8 @@ jobs:
         run: dotnet publish BlazorScheduleNotifier/BlazorScheduleNotifier.csproj -c Release -o release --nologo
       
       # changes the base-tag in index.html from '/' to 'blackout-schedule' to match GitHub Pages repository subdirectory
-      - name: Change base-tag in index.html from / to blackout-schedule
-        run: sed -i 's/<base href="\/" \/>/<base href="\/blackout-schedule\/" \/>/g' release/wwwroot/index.html
+      #- name: Change base-tag in index.html from / to blackout-schedule
+      #  run: sed -i 's/<base href="\/" \/>/<base href="\/blackout-schedule\/" \/>/g' release/wwwroot/index.html
       
       # fix integrity issue
       - name: Fix service-worker-assets.js hashes
