@@ -2,16 +2,83 @@
 
 <PageTitle>LightOff.info - графіки відключення світла</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="row">
+	<div class="col-10">
+		<h1>Суми</h1>
+	</div>
+	<div class="col-2 align-self-end">
+		<h1>
+			<a class="bi-nut text-center" href="./settings" style="font-size:2rem"></a>
+		</h1>
+	</div>
+</div>
 
-Welcome to your new app.
+<div class="row mt-2">
+	<div class="col">
+		<h4>Друга черга</h4>
+		<h6 class="text-success">Включення через</h6>
+	</div>
+	<div class="col">
+		<h1>00:23<span class="text-muted">:00</span></h1>
+	</div>
+</div>
 
+<div class="row mt-2">
+	<div class="col">
+		<h4>Третя черга</h4>
+		<h6 class="text-danger">Вимкнення через</h6>
+	</div>
+	<div class="col">
+		<h1>04:23<span class="text-muted">:00</span></h1>
+	</div>
+</div>
 
+<div class="row mt-4">
+	<div class="col">
+		<div class="card">
+			<div class="card-body">
+				<span class="card-text">Друга черга</span>
+				<h3 class="card-title">18:00 - 20:00</h3>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-body">
+				<span class="card-text">Друга черга</span>
+				<h3 class="card-title">18:00 - 20:00</h3>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-body">
+				<span class="card-text">Друга черга</span>
+				<h3 class="card-title">18:00 - 20:00</h3>
+			</div>
+		</div>
+	</div>
 
-
+	<div class="col">
+		<div class="card">
+			<div class="card-body">
+				<span class="card-text">Друга черга</span>
+				<h3 class="card-title">18:00 - 20:00</h3>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-body">
+				<span class="card-text">Друга черга</span>
+				<h3 class="card-title">18:00 - 20:00</h3>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-body">
+				<span class="card-text">Друга черга</span>
+				<h3 class="card-title">18:00 - 20:00</h3>
+			</div>
+		</div>
+	</div>
+</div>
 
 @inject HttpClient Http
-@code 
+@code
 {
 	protected override async Task OnInitializedAsync()
 	{
