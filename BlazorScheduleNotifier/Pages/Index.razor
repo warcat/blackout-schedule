@@ -78,11 +78,11 @@ else
             </dl>
         </div>
     </div>
-    var contact = "https://t.me/UaWarcat";
+    var contact = "https://t.me/lightoff_info";
     <p class="text-secondary">Розклад відключень електроенергії базується на <a target="_blank" href="./data/sumy.png">цьому</a> графіку</p>
-    <p class="text-secondary">Пропозиції, зауваження пишіть в <a target="_blank"tar href="@contact">телеграм</a></p>
-    <p class="text-center">V 0.3</p>
-    <button @onclick="@( async () => await ResetCache())">Очистити кеш</button>
+    <p class="text-secondary">Офіційний <a target="_blank" tar href="@contact">телеграм-канал</a></p>
+    <p class="text-center">V 0.3.3</p>
+    <button disabled="@_clearButtonDisabled" @onclick="@( async () => await ResetCache())">Очистити кеш</button>
 }
 
 @inject HttpClient Http
@@ -93,6 +93,7 @@ else
     [Parameter]
     public string City { get; set; }
 
+    private bool _clearButtonDisabled;
     private Models.City? _cityData;
     private Queue[]? _queues;
     System.Threading.Timer? _timer;
@@ -147,9 +148,11 @@ else
 
     public async Task ResetCache()
     {
+        _clearButtonDisabled = true;
         await _localStorageService.ClearAsync();
         _cityData = default;
         await ReloadData();
+        _clearButtonDisabled = false;
     }
 
     public async Task<City?> LoadFromLocalCache(string cityId)
