@@ -221,7 +221,7 @@
       "url": "data\/sumy_2x6.png"
     },
     {
-      "hash": "sha256-vlHf0m32MsAcKYrR\/0EnPGWeEKiTieIUX4TuAKiWxOE=",
+      "hash": "sha256-P+Qr0co\/fCz7xOW1RNQGYMDykAzb6u6zdcMglk8eHRo=",
       "url": "data\/sumy.json"
     },
     {
@@ -249,5 +249,5 @@
       "url": "manifest.json"
     }
   ],
-  "version": "j0SVUzVI"
+  "version": "MbdBJOHB"
 };
