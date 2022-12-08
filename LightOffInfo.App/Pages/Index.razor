@@ -33,49 +33,80 @@
 	</div>
 </div>
 
-<div class="row mt-4">
+<div class="row mt-2">
 	<div class="col">
-		<div class="card">
-			<div class="card-body">
-				<span class="card-text">Друга черга</span>
-				<h3 class="card-title">18:00 - 20:00</h3>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<span class="card-text">Друга черга</span>
-				<h3 class="card-title">18:00 - 20:00</h3>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<span class="card-text">Друга черга</span>
-				<h3 class="card-title">18:00 - 20:00</h3>
-			</div>
-		</div>
+		<ul class="nav nav-pills mb-3" role="tablist">
+			<li class="nav-item" role="presentation">
+				<button class="nav-link btn-success active" id="schedule-today-tab" data-bs-toggle="pill" data-bs-target="#schedule-today" type="button" role="tab" aria-controls="schedule-today" aria-selected="true">
+					<span class="fs-6">Сьогодні</span><br />
+					<span class="fs-2">12.08</span>
+				</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link btn-light" id="schedule-tomorrow-tab" data-bs-toggle="pill" data-bs-target="#schedule-tomorrow" type="button" role="tab" aria-controls="schedule-tomorrow" aria-selected="false">
+					<span class="fs-6">Завтра</span><br />
+					<span class="fs-2">13.08</span>
+				</button>
+			</li>
+		</ul>
 	</div>
+</div>
 
+<div class="tab-content">
+</div>
+
+<div class="row">
 	<div class="col">
-		<div class="card">
-			<div class="card-body">
-				<span class="card-text">Друга черга</span>
-				<h3 class="card-title">18:00 - 20:00</h3>
+		<div class="tab-content">
+			<div class="tab-pane fade show active" id="schedule-today" role="tabpanel" aria-labelledby="schedule-today-tab" tabindex="0">
+				<div class="card schedule-item text-muted">
+					<div class="card-body">
+						Перша черга
+						<div class="fw-bold fs-3">14:00 - 18:00</div>
+					</div>
+				</div>
+
+				<div class="card schedule-item text-white bg-danger">
+					<div class="card-body">
+						Перша черга
+						<div class="fw-bold fs-3">14:00 - 18:00</div>
+					</div>
+				</div>
+
+				<div class="card schedule-item">
+					<div class="card-body">
+						Перша черга
+						<div class="fw-bold fs-3">14:00 - 18:00</div>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<span class="card-text">Друга черга</span>
-				<h3 class="card-title">18:00 - 20:00</h3>
-			</div>
-		</div>
-		<div class="card">
-			<div class="card-body">
-				<span class="card-text">Друга черга</span>
-				<h3 class="card-title">18:00 - 20:00</h3>
+
+			<div class="tab-pane fade" id="schedule-tomorrow" role="tabpanel" aria-labelledby="schedule-tomorrow-tab" tabindex="0">
+				<div class="card schedule-item text-muted">
+					<div class="card-body">
+						Перша черга
+						<div class="fw-bold fs-3">14:00 - 18:00</div>
+					</div>
+				</div>
+
+				<div class="card schedule-item text-white bg-danger">
+					<div class="card-body">
+						Перша черга
+						<div class="fw-bold fs-3">14:00 - 18:00</div>
+					</div>
+				</div>
+
+				<div class="card schedule-item">
+					<div class="card-body">
+						Перша черга
+						<div class="fw-bold fs-3">14:00 - 18:00</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
 
 @inject HttpClient Http
 @code

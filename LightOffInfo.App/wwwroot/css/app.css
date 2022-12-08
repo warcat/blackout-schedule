@@ -48,3 +48,15 @@ h1:focus {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+.schedule-item {
+    background: #F2F2F2;
+    border: #F2F2F2;
+    border-radius: 0.75rem;
+    margin-top: 0.5rem!important;
+}
+
+    .schedule-item .card-body {
+        padding: 0.5rem;
+        margin-left: 0.75rem;
+    }
